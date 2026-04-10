@@ -553,21 +553,9 @@ export const UploadPage: React.FC = () => {
             >
               {isGrading ? 'Processing with AI...' : 'Grade Papers'}
             </button>
-            {isGrading && gradingProgress && (
+            {isGrading && (
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-blue-800">AI Grading In Progress</p>
-                  <p className="text-sm font-medium text-blue-600">{gradingProgress.percentage}%</p>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                  <div
-                    className="bg-blue-600 h-3 rounded-full transition-all duration-300 ease-out"
-                    style={{ width: `${gradingProgress.percentage}%` }}
-                  />
-                </div>
-                <p className="text-xs text-blue-600">
-                  Processing {students.length} student{students.length !== 1 ? 's' : ''} for Year {yearLevel}
-                </p>
+                <p className="text-sm font-medium text-blue-800">Grading in process...</p>
               </div>
             )}
           </div>

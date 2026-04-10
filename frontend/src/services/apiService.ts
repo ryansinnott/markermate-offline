@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000, // 30 seconds
+  timeout: 0, // no timeout
 });
 
 export interface FileAnalysisResult {
@@ -216,7 +216,7 @@ class ApiService {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 180000, // 3 minutes for rubric analysis
+      timeout: 0, // no timeout
     });
 
     return response.data;
@@ -315,7 +315,7 @@ class ApiService {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 300000, // 5 minutes for grading
+      timeout: 0, // no timeout
     });
 
     return response.data;
@@ -346,7 +346,7 @@ class ApiService {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 300000, // 5 minutes for grading
+      timeout: 0, // no timeout
     });
 
     return response.data;
@@ -372,21 +372,7 @@ class ApiService {
     return response.data;
   }
 
-  // Saved Rubrics - Session Storage (rubrics are only saved for the browser session)
-  private readonly RUBRICS_KEY = 'markermate_session_rubrics';
-
-  private getStoredRubrics(): SavedRubricFull[] {
-    try {
-      const stored = sessionStorage.getItem(this.RUBRICS_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private saveStoredRubrics(rubrics: SavedRubricFull[]): void {
-    sessionStorage.setItem(this.RUBRICS_KEY, JSON.stringify(rubrics));
-  }
+  // Saved Rubrics - Backend API (persisted in SQLite)
 
   async saveRubric(rubricName: string, rubricData: SavedRubricData): Promise<{
     success: boolean;
@@ -394,43 +380,16 @@ class ApiService {
     rubricName: string;
     error?: string;
   }> {
-    const rubrics = this.getStoredRubrics();
-
-    // Check for duplicate name
-    if (rubrics.some(r => r.rubricName === rubricName)) {
-      return { success: false, id: '', rubricName, error: 'A rubric with this name already exists' };
-    }
-
-    const newRubric: SavedRubricFull = {
-      id: `rubric_${Date.now()}`,
-      rubricName,
-      rubricData,
-      createdAt: Date.now(),
-      lastUsed: Date.now()
-    };
-
-    rubrics.push(newRubric);
-    this.saveStoredRubrics(rubrics);
-
-    return { success: true, id: newRubric.id, rubricName };
+    const response = await api.post('/rubrics/save', { rubricName, rubricData });
+    return response.data;
   }
 
   async getSavedRubrics(): Promise<{
     success: boolean;
     rubrics: SavedRubricListItem[];
   }> {
-    const rubrics = this.getStoredRubrics();
-    const listItems: SavedRubricListItem[] = rubrics.map(r => ({
-      id: r.id,
-      rubricName: r.rubricName,
-      lastUsed: r.lastUsed,
-      createdAt: r.createdAt
-    }));
-
-    // Sort by last used (most recent first)
-    listItems.sort((a, b) => b.lastUsed - a.lastUsed);
-
-    return { success: true, rubrics: listItems };
+    const response = await api.get('/rubrics');
+    return response.data;
   }
 
   async loadRubric(id: string): Promise<{
@@ -442,48 +401,16 @@ class ApiService {
     lastUsed: number;
     error?: string;
   }> {
-    const rubrics = this.getStoredRubrics();
-    const rubric = rubrics.find(r => r.id === id);
-
-    if (!rubric) {
-      return {
-        success: false,
-        id,
-        rubricName: '',
-        rubricData: { criteria: [], totalScore: 0 },
-        createdAt: 0,
-        lastUsed: 0,
-        error: 'Rubric not found'
-      };
-    }
-
-    // Update last used timestamp
-    rubric.lastUsed = Date.now();
-    this.saveStoredRubrics(rubrics);
-
-    return {
-      success: true,
-      id: rubric.id,
-      rubricName: rubric.rubricName,
-      rubricData: rubric.rubricData,
-      createdAt: rubric.createdAt,
-      lastUsed: rubric.lastUsed
-    };
+    const response = await api.get(`/rubrics/${id}`);
+    return response.data;
   }
 
   async deleteRubric(id: string): Promise<{
     success: boolean;
     error?: string;
   }> {
-    const rubrics = this.getStoredRubrics();
-    const filtered = rubrics.filter(r => r.id !== id);
-
-    if (filtered.length === rubrics.length) {
-      return { success: false, error: 'Rubric not found' };
-    }
-
-    this.saveStoredRubrics(filtered);
-    return { success: true };
+    const response = await api.delete(`/rubrics/${id}`);
+    return response.data;
   }
 }
 

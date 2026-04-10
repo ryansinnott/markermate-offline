@@ -58,7 +58,7 @@ export async function callOllamaWithRetry(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(300000) // 5 minute timeout for large PDFs
+        // no timeout - let Ollama take as long as needed
       });
 
       if (!response.ok) {
