@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/project/markermate/static/css/main.b3c291a3.css",
+    "main.js": "/project/markermate/static/js/main.751a0520.js",
+    "index.html": "/project/markermate/index.html",
+    "main.b3c291a3.css.map": "/project/markermate/static/css/main.b3c291a3.css.map",
+    "main.751a0520.js.map": "/project/markermate/static/js/main.751a0520.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b3c291a3.css",
+    "static/js/main.751a0520.js"
+  ]
+}

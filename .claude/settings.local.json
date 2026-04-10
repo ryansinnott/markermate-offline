@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(curl:*)",
+      "Bash(cd \"C:\\Users\\ryan_\\Desktop\\Syntrava\\Marker Mate\\frontend\")",
+      "Bash(npm start)",
+      "Bash(ls:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell:*)",
+      "Bash(cd backend)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(move GradingService.ts gradingService.ts)",
+      "Bash(mv:*)",
+      "Bash(copy:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(dir \"C:\\Users\\ryan_\\Desktop\\Syntrava\\Marker Mate\\backend\\node_modules\")",
+      "Bash(dir:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(cat:*)",
+      "WebSearch",
+      "Bash(gh:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}
