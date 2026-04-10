@@ -259,10 +259,10 @@ EXPECTATIONS for Year 7:
 • Organization: May lack clear introduction/conclusion, ideas presented linearly
 • Errors: Several spelling/grammar errors expected and acceptable for this age
 
-GRADING THRESHOLD: Award rubric levels when requirements are met at Year 7 capacity. If rubric says "organized writing", simple paragraph structure qualifies.`,
+GRADING APPROACH: Award rubric levels when requirements are met at Year 7 capacity. If rubric says "organized writing", simple paragraph structure qualifies.`,
 
       8: `YEAR 8 DEVELOPING STANDARDS (Ages 13-14):
-Expect 15-20% MORE quality than Year 7 to earn the SAME rubric level.
+Expect slightly more polish than Year 7.
 
 EXPECTATIONS beyond Year 7:
 • Vocabulary: Some variety beyond basic words (e.g., "significant", "demonstrates", "illustrates")
@@ -272,10 +272,10 @@ EXPECTATIONS beyond Year 7:
 • Organization: Attempts at introduction and conclusion, clearer structure
 • Errors: Fewer errors than Year 7, better control of basics
 
-GRADING THRESHOLD: What earns "4/4" for Year 7 might only earn "3/4" for Year 8. Raise the bar proportionally.`,
+GRADING APPROACH: Apply rubric descriptors with the understanding that Year 8 students should show early development beyond Year 7 basics. The rubric itself sets the standard — apply it fairly.`,
 
       9: `YEAR 9 INTERMEDIATE STANDARDS (Ages 14-15):
-Expect 30-40% MORE quality than Year 7 to earn the SAME rubric level.
+Expect developing academic skills.
 
 EXPECTATIONS beyond Year 7-8:
 • Vocabulary: Academic vocabulary emerging (e.g., "analyze", "interpret", "implication", "perspective")
@@ -285,10 +285,10 @@ EXPECTATIONS beyond Year 7-8:
 • Organization: Clear introduction with thesis, body paragraphs, conclusion that synthesizes
 • Errors: Minimal basic errors, control of more complex grammar
 
-GRADING THRESHOLD: What earns "4/4" for Year 7 might only earn "2-3/4" for Year 9. Significantly raise expectations.`,
+GRADING APPROACH: Year 9 students should demonstrate growing sophistication. Apply the rubric expecting competent paragraph-level writing with emerging analytical thinking.`,
 
       10: `YEAR 10 ADVANCED STANDARDS (Ages 15-16):
-Expect 40-50% MORE quality than Year 7 to earn the SAME rubric level. This is pre-senior year preparation.
+Expect solid academic writing with analytical depth.
 
 EXPECTATIONS beyond Year 7-9:
 • Vocabulary: Sophisticated academic vocabulary throughout (e.g., "synthesize", "paradox", "nuanced", "paradigm")
@@ -298,10 +298,10 @@ EXPECTATIONS beyond Year 7-9:
 • Organization: Cohesive essay structure with clear thesis, well-developed arguments, synthesizing conclusion
 • Errors: Rare basic errors, near-mastery of conventions
 
-GRADING THRESHOLD: What earns "4/4" for Year 7 likely earns "2/4" for Year 10. SAME QUALITY WORK = LOWER SCORE at higher year levels. Be significantly more critical.`,
+GRADING APPROACH: Year 10 students should show confident academic writing. Apply the rubric expecting well-structured essays with genuine analytical thinking. Work that is merely descriptive should score in the middle range.`,
 
       11: `YEAR 11 PRE-UNIVERSITY STANDARDS (Ages 16-17):
-Expect 60-70% MORE quality than Year 7 to earn the SAME rubric level. Apply senior secondary standards.
+Expect mature academic writing with depth and precision.
 
 EXPECTATIONS beyond Year 10:
 • Vocabulary: Discipline-specific terminology, precise word choice, sophisticated expression
@@ -311,10 +311,10 @@ EXPECTATIONS beyond Year 10:
 • Organization: Sophisticated essay architecture - thesis development throughout, compelling argument flow
 • Errors: Professional-level writing conventions, polished presentation
 
-GRADING THRESHOLD: Year 7 "excellent" work (4/4) would be Year 11 "satisfactory" work (2/4). Demand near-professional quality for top marks.`,
+GRADING APPROACH: Year 11 students are approaching senior standards. Apply the rubric expecting polished, well-argued writing. Surface-level analysis should score in the lower-to-middle range.`,
 
       12: `YEAR 12 UNIVERSITY-PREPARATION STANDARDS (Ages 17-18):
-Expect 75-90% MORE quality than Year 7 to earn the SAME rubric level. Apply the HIGHEST academic standards.
+Expect polished, university-ready academic writing.
 
 EXPECTATIONS - University-level writing:
 • Vocabulary: Sophisticated, precise, discipline-specific throughout - could appear in academic journals
@@ -324,7 +324,7 @@ EXPECTATIONS - University-level writing:
 • Organization: Compelling argument architecture, sophisticated thesis development, intellectual coherence
 • Errors: Publication-quality writing, mastery of all conventions
 
-GRADING THRESHOLD: Year 7 "excellent" work (4/4) is Year 12 "poor-satisfactory" work (1-2/4). Only truly exceptional, university-ready writing earns top marks. Be EXTREMELY critical.`
+GRADING APPROACH: Year 12 students should demonstrate university-readiness. Apply the rubric expecting mature, well-crafted arguments. Only genuinely sophisticated work earns top marks, but competent academic writing still earns solid middle-range scores.`
     };
 
     return contexts[yearLevel as keyof typeof contexts] || contexts[10];
@@ -790,13 +790,11 @@ Return ONLY valid JSON in this exact format:
 
 ${yearLevelContext}
 
-YEAR LEVEL CALIBRATION - CRITICAL INSTRUCTION:
-${yearLevel >= 8 ? `• The SAME quality essay receives DIFFERENT scores at different year levels
-• A Year 7 student's "excellent" work (4/4) would typically be "satisfactory" or "developing" work (2/4 or 3/4) for Year ${yearLevel}
-• You MUST be progressively MORE CRITICAL as year level increases
-• Higher year levels require SUBSTANTIALLY HIGHER quality to earn the same rubric scores
-• Apply the Year ${yearLevel} expectations listed above - do NOT grade as if this were a younger student
-• If this student's work quality would earn top marks in Year 7, but they are Year ${yearLevel}, award LOWER marks accordingly` : ''}`;
+YEAR LEVEL CONTEXT:
+${yearLevel >= 8 ? `• This student is in Year ${yearLevel}. Use the Year ${yearLevel} expectations above to understand what is age-appropriate.
+• The rubric descriptors should be interpreted through the lens of Year ${yearLevel} standards.
+• For example, "well-developed ideas" means well-developed for a Year ${yearLevel} student.
+• Grade fairly: award the level that best matches the student's actual demonstrated skill against the rubric.` : ''}`;
       }
 
       systemPrompt += `\n\nMARKING RUBRIC - Apply these criteria with professional precision:
@@ -831,40 +829,27 @@ PROFESSIONAL MARKING PROCESS:
    • If requirements are missing or partially met, use the appropriate LOWER level
    • Evaluate ALL aspects against rubric standards - both strengths AND gaps
 
-4. EVIDENCE-BASED SCORING:
-   • Use the exact language from rubric descriptors to justify scores
-   • Provide specific quotes from the student's work as evidence
-   • Be consistent across all criteria - similar quality should receive similar relative scores
-   • Apply ${yearLevel ? `Year ${yearLevel}` : 'age-appropriate'} expectations fairly
-   • Missing or weak elements MUST result in lower scores per the rubric
+4. WRITING DETAILED FEEDBACK - IMPORTANT:
+   For EACH criterion, write 2-3 sentences of feedback that include:
+   - One specific strength, citing a quote or example from the student's work
+   - One specific area for improvement with a concrete suggestion
+   - Reference to the rubric descriptor that best matches their performance
+   Write in a professional teacher voice — honest and direct, but respectful.
 
-STRICTNESS CALIBRATION - APPLY RIGOROUSLY:
-• This is formal assessment, not encouraging feedback
-• Each rubric level lists SPECIFIC requirements that MUST be met to earn those points
-• If the essay does NOT demonstrate a descriptor's requirements, do NOT award that level
-• Partial achievement = award the LOWER level's points unless clearly closer to higher
-• Between two levels? Choose the LOWER level unless 85-90%+ toward the higher
-• When uncertain between levels, DEFAULT TO THE LOWER LEVEL
-• Top scores require COMPLETE demonstration of ALL top-level descriptor elements
-• Do NOT award points for effort alone - only for demonstrated mastery per rubric
-• Missing elements, errors, or weak execution = lower scores according to rubric standards
+   For the SUMMARY, write 3-5 sentences covering: overall strengths, areas for growth, and one specific next step.
 
-RUBRIC DESCRIPTOR MATCHING - MANDATORY:
-• Each score MUST explicitly match a specific rubric descriptor's language
-• If a rubric level says "sophisticated vocabulary" and the essay has basic vocabulary, that level is NOT earned
-• If a rubric level says "well-developed arguments" and arguments are underdeveloped, that level is NOT earned
-• Quote the EXACT rubric descriptor language that justifies the score you award
-• If the work does NOT meet a descriptor's specific requirements, you MUST use the next lower level
-• Rubric descriptors are REQUIREMENTS, not suggestions - treat them as mandatory criteria
-• Your feedback must cite which descriptor requirements were met (or not met) to justify the score
+SCORING STANDARDS:
+• Each rubric level lists specific requirements. Match the student's work to the level whose descriptors best fit.
+• Award the level where MOST of the descriptors are demonstrated. Perfect demonstration is not required — look for the best overall fit.
+• Between two levels? Consider whether the student has demonstrated the KEY distinguishing requirement of the higher level. If yes, award the higher level. If not, award the lower level.
+• Top scores require strong demonstration of the top-level descriptors, but minor gaps in one area do not disqualify an otherwise excellent response.
+• Base scores on demonstrated skill, not effort alone.
 
-CRITICAL MARKING PRINCIPLES:
-• Match rubric standards EXACTLY - do NOT be more lenient than rubric descriptors allow
-• Each score must be JUSTIFIED by specific rubric level requirements being met
-• If a requirement is NOT met, use the lower level that matches actual performance
-• Gaps, errors, or missing elements = lower scores per rubric standards
-• Be precise and accurate - expect students to MEET ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} standards to earn ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} marks
-• Professional rigor: Not every essay deserves top marks - differentiate quality levels clearly
+RUBRIC ALIGNMENT:
+• Match each score to the rubric level that best describes the student's work.
+• In your feedback, reference the specific rubric descriptor language that fits the student's performance.
+• Example: If rubric says "well-developed arguments" and the student's arguments are partially developed, the next lower level is likely the better fit.
+• Your feedback should explain which descriptor requirements were met to justify the score.
 
 OUTPUT FORMAT:
 Return ONLY valid JSON in this exact format:
@@ -880,12 +865,14 @@ Return ONLY valid JSON in this exact format:
     }
   ],
   "summary": "This essay demonstrates [specific strengths with examples]. Student shows particular strength in [area] as evidenced by '[quote]'. Areas for development include [specific areas]. Overall, this represents [level] work for ${yearLevel ? `Year ${yearLevel}` : 'grade level'} with [specific next steps]."
-}`;
+}
+
+IMPORTANT: Each "feedback" field must be 2-3 full sentences. Each must include at least one direct quote from the student's work. The "summary" must be 3-5 sentences. Do not write single-sentence feedback.`;
 
       // Build student-specific user prompt
       const userPrompt = `Transcribe AND grade this student's work (${studentName}). Apply all instructions from the system prompt.`;
 
-      const responseContent = await callOllamaWithRetry(userPrompt, { images, system: systemPrompt, temperature: 0 });
+      const responseContent = await callOllamaWithRetry(userPrompt, { images, system: systemPrompt, temperature: 0.3 });
       const parsed = this.extractJsonFromResponse(responseContent, 'transcribeAndGrade');
 
       // Calculate totals
@@ -1485,118 +1472,97 @@ Return ONLY valid JSON in this exact format:
 
       const yearLevelContext = yearLevel ? this.getYearLevelGradingContext(yearLevel) : '';
       
-      const prompt = `
-        You are an experienced professional teacher marking this essay with the same accuracy and consistency that an expert educator would provide. Act as a seasoned teacher who has marked thousands of essays and knows exactly how to apply rubric standards fairly and rigorously.
+      const systemPrompt = `You are an experienced professional teacher marking essays with the same accuracy and consistency that an expert educator would provide. Act as a seasoned teacher who has marked thousands of essays and knows exactly how to apply rubric standards fairly and rigorously.
 
-        ${yearLevel ? `\n\nSTUDENT CONTEXT: This is a Year ${yearLevel} student. ${yearLevelContext}` : ''}
+${yearLevel ? `STUDENT CONTEXT: This is a Year ${yearLevel} student. ${yearLevelContext}` : ''}
 
-        YEAR LEVEL CALIBRATION - CRITICAL INSTRUCTION:
-        ${yearLevel ? `
-        • The SAME quality essay receives DIFFERENT scores at different year levels
-        • A Year 7 student's "excellent" work (4/4) would typically be "satisfactory" or "developing" work (2/4 or 3/4) for Year ${yearLevel}
-        • You MUST be progressively MORE CRITICAL as year level increases
-        • Higher year levels require SUBSTANTIALLY HIGHER quality to earn the same rubric scores
-        • Apply the Year ${yearLevel} expectations listed above - do NOT grade as if this were a younger student
-        • If this student's work quality would earn top marks in Year 7, but they are Year ${yearLevel}, award LOWER marks accordingly
-        ` : ''}
+YEAR LEVEL CONTEXT:
+${yearLevel ? `
+• This student is in Year ${yearLevel}. Use the Year ${yearLevel} expectations above to understand what is age-appropriate.
+• The rubric descriptors should be interpreted through the lens of Year ${yearLevel} standards.
+• For example, "well-developed ideas" means well-developed for a Year ${yearLevel} student.
+• Grade fairly: award the level that best matches the student's actual demonstrated skill against the rubric.
+` : ''}
 
-        MARKING RUBRIC - Apply these criteria with professional precision:
-        ${criteria.map(c => {
-          let criteriaText = `\n**${c.name.toUpperCase()} (Maximum: ${c.maxScore} points)**\n${c.description}`;
-          if (c.scoringLevels && c.scoringLevels.length > 0) {
-            criteriaText += '\n\nPerformance Standards:';
-            c.scoringLevels.forEach(level => {
-              criteriaText += `\n• ${level.level} (${level.points} pts): ${level.description}`;
-            });
-          }
-          return criteriaText;
-        }).join('\n\n')}
+MARKING RUBRIC - Apply these criteria with professional precision:
+${criteria.map(c => {
+  let criteriaText = `\n**${c.name.toUpperCase()} (Maximum: ${c.maxScore} points)**\n${c.description}`;
+  if (c.scoringLevels && c.scoringLevels.length > 0) {
+    criteriaText += '\n\nPerformance Standards:';
+    c.scoringLevels.forEach(level => {
+      criteriaText += `\n• ${level.level} (${level.points} pts): ${level.description}`;
+    });
+  }
+  return criteriaText;
+}).join('\n\n')}
 
-        STUDENT'S ESSAY TO MARK:
-        "${studentText}"
+PROFESSIONAL MARKING PROCESS:
 
-        PROFESSIONAL MARKING PROCESS:
+1. HOLISTIC READING: First, read the entire essay to understand the student's overall achievement and intent.
 
-        1. HOLISTIC READING: First, read the entire essay to understand the student's overall achievement and intent.
+2. SYSTEMATIC EVALUATION: For each rubric criterion:
+   - Identify specific evidence in the student's writing that demonstrates their performance level
+   - Quote relevant passages that support your judgment
+   - Match the essay's quality to the EXACT rubric descriptors (don't just assign points arbitrarily)
+   - Award points ONLY when the work meets the specific requirements stated in each level
+   - If requirements are missing or partially met, use the appropriate LOWER level
+   - Evaluate ALL aspects against rubric standards - both strengths AND gaps
+   - OCR quirks: Distinguish between genuine spelling/grammar vs. transcription errors (e.g., "tbe" for "the"), but do NOT excuse actual student errors
 
-        2. SYSTEMATIC EVALUATION: For each rubric criterion:
-           - Identify specific evidence in the student's writing that demonstrates their performance level
-           - Quote relevant passages that support your judgment
-           - Match the essay's quality to the EXACT rubric descriptors (don't just assign points arbitrarily)
-           - Award points ONLY when the work meets the specific requirements stated in each level
-           - If requirements are missing or partially met, use the appropriate LOWER level
-           - Evaluate ALL aspects against rubric standards - both strengths AND gaps
-           - OCR quirks: Distinguish between genuine spelling/grammar vs. transcription errors (e.g., "tbe" for "the"), but do NOT excuse actual student errors
+3. EVIDENCE-BASED SCORING:
+   - Use the exact language from rubric descriptors to justify scores
+   - Provide specific quotes from the student's work as evidence
+   - Be consistent across all criteria - similar quality should receive similar relative scores
+   - Apply ${yearLevel ? `Year ${yearLevel}` : 'age-appropriate'} expectations fairly
+   - Missing or weak elements MUST result in lower scores per the rubric
 
-        3. EVIDENCE-BASED SCORING:
-           - Use the exact language from rubric descriptors to justify scores
-           - Provide specific quotes from the student's work as evidence
-           - Be consistent across all criteria - similar quality should receive similar relative scores
-           - Apply ${yearLevel ? `Year ${yearLevel}` : 'age-appropriate'} expectations fairly
-           - Missing or weak elements MUST result in lower scores per the rubric
+4. WRITING DETAILED FEEDBACK - IMPORTANT:
+   For EACH criterion, write 2-3 sentences of feedback that include:
+   - One specific strength, citing a quote or example from the student's work
+   - One specific area for improvement with a concrete suggestion
+   - Reference to the rubric descriptor that best matches their performance
+   Write in a professional teacher voice — honest and direct, but respectful.
 
-        4. PROFESSIONAL FEEDBACK:
-           - Write feedback in an encouraging teacher voice
-           - Highlight specific strengths with evidence
-           - Suggest concrete areas for improvement
-           - Sound like a real teacher, not an AI
+   For the SUMMARY, write 3-5 sentences covering: overall strengths, areas for growth, and one specific next step.
 
-        STRICTNESS CALIBRATION - APPLY RIGOROUSLY:
-        - This is formal assessment, not encouraging feedback
-        - Each rubric level lists SPECIFIC requirements that MUST be met to earn those points
-        - If the essay does NOT demonstrate a descriptor's requirements, do NOT award that level
-        - Partial achievement = award the LOWER level's points unless clearly closer to higher
-        - Between two levels? Choose the LOWER level unless 85-90%+ toward the higher
-        - When uncertain between levels, DEFAULT TO THE LOWER LEVEL
-        - Top scores require COMPLETE demonstration of ALL top-level descriptor elements
-        - Do NOT award points for effort alone - only for demonstrated mastery per rubric
-        - Missing elements, errors, or weak execution = lower scores according to rubric standards
+SCORING STANDARDS:
+• Each rubric level lists specific requirements. Match the student's work to the level whose descriptors best fit.
+• Award the level where MOST of the descriptors are demonstrated. Perfect demonstration is not required — look for the best overall fit.
+• Between two levels? Consider whether the student has demonstrated the KEY distinguishing requirement of the higher level. If yes, award the higher level. If not, award the lower level.
+• Top scores require strong demonstration of the top-level descriptors, but minor gaps in one area do not disqualify an otherwise excellent response.
+• Base scores on demonstrated skill, not effort alone.
 
-        CONSISTENCY RULE FOR BORDERLINE CASES - MANDATORY TIE-BREAKER:
-        When a student's work falls between two scoring levels, apply this systematic decision process:
-        1. COUNT how many specific requirements from the HIGHER level are fully demonstrated
-        2. COUNT how many specific requirements from the LOWER level are fully demonstrated
-        3. DECISION RULE:
-           - If 3 or more requirements of the higher level are clearly met → award the HIGHER level
-           - If fewer than 3 requirements of the higher level are met → award the LOWER level
-        4. DOCUMENTATION: In your feedback, explicitly state which specific requirements from each level were met or not met to justify your borderline decision
-        5. NEVER split the difference or invent intermediate scores - always award the exact level that matches your requirement count
+BORDERLINE CASES:
+When a student's work falls between two scoring levels, ask: "Does this work demonstrate the MAIN distinguishing feature of the higher level?" If yes, award the higher level. If no, award the lower level. In your feedback, briefly explain which level was the better fit and why.
 
-        RUBRIC DESCRIPTOR MATCHING - MANDATORY:
-        - Each score MUST explicitly match a specific rubric descriptor's language
-        - If a rubric level says "sophisticated vocabulary" and the essay has basic vocabulary, that level is NOT earned
-        - If a rubric level says "well-developed arguments" and arguments are underdeveloped, that level is NOT earned
-        - Quote the EXACT rubric descriptor language that justifies the score you award
-        - If the work does NOT meet a descriptor's specific requirements, you MUST use the next lower level
-        - Rubric descriptors are REQUIREMENTS, not suggestions - treat them as mandatory criteria
-        - Your feedback must cite which descriptor requirements were met (or not met) to justify the score
+RUBRIC ALIGNMENT:
+• Match each score to the rubric level that best describes the student's work.
+• In your feedback, reference the specific rubric descriptor language that fits the student's performance.
+• Example: If rubric says "well-developed arguments" and the student's arguments are partially developed, the next lower level is likely the better fit.
+• Your feedback should explain which descriptor requirements were met to justify the score.
 
-        CRITICAL MARKING PRINCIPLES:
-        - Match rubric standards EXACTLY - do NOT be more lenient than rubric descriptors allow
-        - Each score must be JUSTIFIED by specific rubric level requirements being met
-        - If a requirement is NOT met, use the lower level that matches actual performance
-        - Gaps, errors, or missing elements = lower scores per rubric standards
-        - Be precise and accurate - expect students to MEET ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} standards to earn ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} marks
-        - Professional rigor: Not every essay deserves top marks - differentiate quality levels clearly
-        - Quote specific text passages to justify each score
-        - Provide specific, actionable feedback
-        - Maintain consistency across all criteria
+Return ONLY valid JSON in this exact format:
+{
+  "grades": [
+    {
+      "criterion": "Content",
+      "score": 3,
+      "maxScore": 4,
+      "feedback": "Strong content demonstrated by [specific quote from essay]. Shows clear understanding of [specific concept]. The argument that '[quote]' effectively demonstrates [specific skill]. To improve: [specific actionable suggestion]."
+    }
+  ],
+  "summary": "This essay demonstrates [specific strengths with examples]. [Student name] shows particular strength in [area] as evidenced by '[quote]'. Areas for development include [specific areas]. Overall, this represents [level] work for Year ${yearLevel || 'grade level'} with [specific next steps]."
+}
 
-        Return ONLY valid JSON in this exact format:
-        {
-          "grades": [
-            {
-              "criterion": "Content",
-              "score": 45,
-              "maxScore": 50,
-              "feedback": "Strong content demonstrated by [specific quote from essay]. Shows clear understanding of [specific concept]. The argument that '[quote]' effectively demonstrates [specific skill]. To improve: [specific actionable suggestion]."
-            }
-          ],
-          "summary": "This essay demonstrates [specific strengths with examples]. [Student name] shows particular strength in [area] as evidenced by '[quote]'. Areas for development include [specific areas]. Overall, this represents [level] work for Year ${yearLevel || 'grade level'} with [specific next steps]."
-        }
-      `;
+IMPORTANT: Each "feedback" field must be 2-3 full sentences. Each must include at least one direct quote from the student's work. The "summary" must be 3-5 sentences. Do not write single-sentence feedback.`;
 
-      const responseText = await callOllamaWithRetry(prompt, { temperature: 0 });
+      const userMessage = `Grade this student's essay (${studentName}):
+
+"${studentText}"
+
+Apply all marking instructions. Return ONLY valid JSON.`;
+
+      const responseText = await callOllamaWithRetry(userMessage, { system: systemPrompt, temperature: 0.3 });
       if (!responseText) {
         throw new Error('No response from Ollama');
       }
@@ -1664,14 +1630,12 @@ Return ONLY valid JSON in this exact format:
 
 ${yearLevel ? `\n\nSTUDENT CONTEXT: This is a Year ${yearLevel} student. ${yearLevelContext}` : ''}
 
-YEAR LEVEL CALIBRATION - CRITICAL INSTRUCTION:
+YEAR LEVEL CONTEXT:
 ${yearLevel ? `
-• The SAME quality essay receives DIFFERENT scores at different year levels
-• A Year 7 student's "excellent" work (4/4) would typically be "satisfactory" or "developing" work (2/4 or 3/4) for Year ${yearLevel}
-• You MUST be progressively MORE CRITICAL as year level increases
-• Higher year levels require SUBSTANTIALLY HIGHER quality to earn the same rubric scores
-• Apply the Year ${yearLevel} expectations listed above - do NOT grade as if this were a younger student
-• If this student's work quality would earn top marks in Year 7, but they are Year ${yearLevel}, award LOWER marks accordingly
+• This student is in Year ${yearLevel}. Use the Year ${yearLevel} expectations above to understand what is age-appropriate.
+• The rubric descriptors should be interpreted through the lens of Year ${yearLevel} standards.
+• For example, "well-developed ideas" means well-developed for a Year ${yearLevel} student.
+• Grade fairly: award the level that best matches the student's actual demonstrated skill against the rubric.
 ` : ''}
 
 PROFESSIONAL MARKING PROCESS:
@@ -1694,52 +1658,30 @@ PROFESSIONAL MARKING PROCESS:
    - Apply ${yearLevel ? `Year ${yearLevel}` : 'age-appropriate'} expectations fairly
    - Missing or weak elements MUST result in lower scores per the rubric
 
-4. PROFESSIONAL FEEDBACK:
-   - Write feedback in an encouraging teacher voice
-   - Highlight specific strengths with evidence
-   - Suggest concrete areas for improvement
-   - Sound like a real teacher, not an AI
+4. WRITING DETAILED FEEDBACK - IMPORTANT:
+   For EACH criterion, write 2-3 sentences of feedback that include:
+   - One specific strength, citing a quote or example from the student's work
+   - One specific area for improvement with a concrete suggestion
+   - Reference to the rubric descriptor that best matches their performance
+   Write in a professional teacher voice — honest and direct, but respectful.
 
-STRICTNESS CALIBRATION - APPLY RIGOROUSLY:
-- This is formal assessment, not encouraging feedback
-- Each rubric level lists SPECIFIC requirements that MUST be met to earn those points
-- If the essay does NOT demonstrate a descriptor's requirements, do NOT award that level
-- Partial achievement = award the LOWER level's points unless clearly closer to higher
-- Between two levels? Choose the LOWER level unless 85-90%+ toward the higher
-- When uncertain between levels, DEFAULT TO THE LOWER LEVEL
-- Top scores require COMPLETE demonstration of ALL top-level descriptor elements
-- Do NOT award points for effort alone - only for demonstrated mastery per rubric
-- Missing elements, errors, or weak execution = lower scores according to rubric standards
+   For the SUMMARY, write 3-5 sentences covering: overall strengths, areas for growth, and one specific next step.
 
-CONSISTENCY RULE FOR BORDERLINE CASES - MANDATORY TIE-BREAKER:
-When a student's work falls between two scoring levels, apply this systematic decision process:
-1. COUNT how many specific requirements from the HIGHER level are fully demonstrated
-2. COUNT how many specific requirements from the LOWER level are fully demonstrated
-3. DECISION RULE:
-   - If 3 or more requirements of the higher level are clearly met → award the HIGHER level
-   - If fewer than 3 requirements of the higher level are met → award the LOWER level
-4. DOCUMENTATION: In your feedback, explicitly state which specific requirements from each level were met or not met to justify your borderline decision
-5. NEVER split the difference or invent intermediate scores - always award the exact level that matches your requirement count
+SCORING STANDARDS:
+• Each rubric level lists specific requirements. Match the student's work to the level whose descriptors best fit.
+• Award the level where MOST of the descriptors are demonstrated. Perfect demonstration is not required — look for the best overall fit.
+• Between two levels? Consider whether the student has demonstrated the KEY distinguishing requirement of the higher level. If yes, award the higher level. If not, award the lower level.
+• Top scores require strong demonstration of the top-level descriptors, but minor gaps in one area do not disqualify an otherwise excellent response.
+• Base scores on demonstrated skill, not effort alone.
 
-RUBRIC DESCRIPTOR MATCHING - MANDATORY:
-- Each score MUST explicitly match a specific rubric descriptor's language
-- If a rubric level says "sophisticated vocabulary" and the essay has basic vocabulary, that level is NOT earned
-- If a rubric level says "well-developed arguments" and arguments are underdeveloped, that level is NOT earned
-- Quote the EXACT rubric descriptor language that justifies the score you award
-- If the work does NOT meet a descriptor's specific requirements, you MUST use the next lower level
-- Rubric descriptors are REQUIREMENTS, not suggestions - treat them as mandatory criteria
-- Your feedback must cite which descriptor requirements were met (or not met) to justify the score
+BORDERLINE CASES:
+When a student's work falls between two scoring levels, ask: "Does this work demonstrate the MAIN distinguishing feature of the higher level?" If yes, award the higher level. If no, award the lower level. In your feedback, briefly explain which level was the better fit and why.
 
-CRITICAL MARKING PRINCIPLES:
-- Match rubric standards EXACTLY - do NOT be more lenient than rubric descriptors allow
-- Each score must be JUSTIFIED by specific rubric level requirements being met
-- If a requirement is NOT met, use the lower level that matches actual performance
-- Gaps, errors, or missing elements = lower scores per rubric standards
-- Be precise and accurate - expect students to MEET ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} standards to earn ${yearLevel ? `Year ${yearLevel}` : 'grade-level'} marks
-- Professional rigor: Not every essay deserves top marks - differentiate quality levels clearly
-- Quote specific text passages to justify each score
-- Provide specific, actionable feedback
-- Maintain consistency across all criteria
+RUBRIC ALIGNMENT:
+• Match each score to the rubric level that best describes the student's work.
+• In your feedback, reference the specific rubric descriptor language that fits the student's performance.
+• Example: If rubric says "well-developed arguments" and the student's arguments are partially developed, the next lower level is likely the better fit.
+• Your feedback should explain which descriptor requirements were met to justify the score.
 
 MARKING RUBRIC - Apply these criteria with professional precision:
 ${criteria.map(c => {
@@ -1758,13 +1700,15 @@ Return ONLY valid JSON in this exact format:
   "grades": [
     {
       "criterion": "Content",
-      "score": 45,
-      "maxScore": 50,
+      "score": 3,
+      "maxScore": 4,
       "feedback": "Strong content demonstrated by [specific quote from essay]. Shows clear understanding of [specific concept]. The argument that '[quote]' effectively demonstrates [specific skill]. To improve: [specific actionable suggestion]."
     }
   ],
   "summary": "This essay demonstrates [specific strengths with examples]. [Student name] shows particular strength in [area] as evidenced by '[quote]'. Areas for development include [specific areas]. Overall, this represents [level] work for Year ${yearLevel || 'grade level'} with [specific next steps]."
-}`;
+}
+
+IMPORTANT: Each "feedback" field must be 2-3 full sentences. Each must include at least one direct quote from the student's work. The "summary" must be 3-5 sentences. Do not write single-sentence feedback.`;
 
       // Build student-specific user message (unique per student)
       const userMessage = `Grade this student's essay (${studentName}):
@@ -1773,7 +1717,7 @@ Return ONLY valid JSON in this exact format:
 
 Apply all marking instructions and rubric criteria from the system prompt. Return ONLY valid JSON.`;
 
-      const responseText = await callOllamaWithRetry(userMessage, { system: systemPrompt, temperature: 0 });
+      const responseText = await callOllamaWithRetry(userMessage, { system: systemPrompt, temperature: 0.3 });
       if (!responseText) {
         throw new Error('No response from Ollama');
       }
