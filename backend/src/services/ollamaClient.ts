@@ -48,7 +48,8 @@ export async function callOllamaWithRetry(
         prompt,
         stream: false,
         options: {
-          temperature
+          temperature,
+          num_ctx: 8192
         }
       };
 
@@ -62,6 +63,7 @@ export async function callOllamaWithRetry(
 
       logger.info(`[OLLAMA] Attempt ${attempt}/${maxRetries} - model: ${OLLAMA_MODEL}, prompt: ${prompt.length} chars, images: ${images?.length || 0}`);
 
+      const callStart = Date.now();
       const response = await fetch(`${OLLAMA_URL}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,12 +77,13 @@ export async function callOllamaWithRetry(
       }
 
       const data = await response.json() as OllamaResponse;
+      const callElapsed = ((Date.now() - callStart) / 1000).toFixed(1);
 
       if (!data.response) {
         throw new Error('Empty response from Ollama');
       }
 
-      logger.info(`[OLLAMA] Success on attempt ${attempt} - response: ${data.response.length} chars`);
+      logger.info(`[OLLAMA] Success on attempt ${attempt} - ${callElapsed}s elapsed, response: ${data.response.length} chars, eval_count: ${data.eval_count || 'n/a'}`);
       return data.response;
 
     } catch (error: any) {

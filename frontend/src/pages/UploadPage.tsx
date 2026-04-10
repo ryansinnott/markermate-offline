@@ -39,6 +39,8 @@ export const UploadPage: React.FC = () => {
     percentage: number;
   } | null>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [gradingElapsed, setGradingElapsed] = useState(0);
+  const elapsedTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Saved rubrics state
   const [savedRubrics, setSavedRubrics] = useState<SavedRubricListItem[]>([]);
@@ -158,6 +160,10 @@ export const UploadPage: React.FC = () => {
       clearInterval(pollingIntervalRef.current);
       pollingIntervalRef.current = null;
     }
+    if (elapsedTimerRef.current) {
+      clearInterval(elapsedTimerRef.current);
+      elapsedTimerRef.current = null;
+    }
   }, []);
 
   const performCompleteGrading = async () => {
@@ -171,6 +177,10 @@ export const UploadPage: React.FC = () => {
     }
 
     setIsGrading(true);
+    setGradingElapsed(0);
+    elapsedTimerRef.current = setInterval(() => {
+      setGradingElapsed(prev => prev + 1);
+    }, 1000);
 
     // Initialize progress with starting state
     // Estimate ~15 seconds per student for grading
@@ -555,7 +565,17 @@ export const UploadPage: React.FC = () => {
             </button>
             {isGrading && (
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm font-medium text-blue-800">Grading in process...</p>
+                <div className="flex items-center gap-3">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                  <div>
+                    <p className="text-sm font-medium text-blue-800">
+                      Grading in progress — {Math.floor(gradingElapsed / 60)}:{String(gradingElapsed % 60).padStart(2, '0')} elapsed
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      AI is transcribing and grading each page sequentially. This can take 2-5 minutes per image. Please don't close the tab.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>

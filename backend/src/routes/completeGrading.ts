@@ -940,7 +940,7 @@ router.post('/grade-with-criteria', submissionUpload.any(), async (req, res, nex
       studentsData,
       rubricCriteria,
       yearLevel,
-      8, // concurrency limit - increased for better throughput
+      1, // sequential: 31B model fills VRAM, parallel causes thrashing
       onProgress
     );
 

@@ -940,7 +940,7 @@ Return ONLY valid JSON in this exact format:
     }>,
     criteria: GradingCriterion[],
     yearLevel?: number,
-    concurrencyLimit: number = 8,  // Increased from 5 to 8 for better parallelism
+    concurrencyLimit: number = 1,  // Sequential: 31B model fills VRAM, parallel thrashes GPU
     onProgress?: (stage: 'transcribing' | 'grading', completed: number, total: number) => void
   ): Promise<Array<{
     studentId: number;
