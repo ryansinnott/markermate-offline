@@ -1,7 +1,15 @@
+import { Agent } from 'undici';
 import { logger } from '../utils/logger';
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4:31b';
+
+// Disable Node's default headers/body timeouts for long-running Ollama requests
+const ollamaDispatcher = new Agent({
+  headersTimeout: 0,
+  bodyTimeout: 0,
+  connectTimeout: 30_000,
+});
 
 export interface OllamaResponse {
   response: string;
@@ -58,7 +66,8 @@ export async function callOllamaWithRetry(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-        // no timeout - let Ollama take as long as needed
+        // @ts-ignore - Node.js fetch supports dispatcher via undici
+        dispatcher: ollamaDispatcher,
       });
 
       if (!response.ok) {
