@@ -31,6 +31,7 @@ export async function callOllamaWithRetry(
     maxRetries?: number;
     baseDelay?: number;
     temperature?: number;
+    num_predict?: number;    // Max output tokens (caps generation length)
   } = {}
 ): Promise<string> {
   const {
@@ -38,7 +39,8 @@ export async function callOllamaWithRetry(
     system,
     maxRetries = 3,
     baseDelay = 1000,
-    temperature = 0
+    temperature = 0,
+    num_predict = 4096
   } = options;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -49,7 +51,8 @@ export async function callOllamaWithRetry(
         stream: false,
         options: {
           temperature,
-          num_ctx: 8192
+          num_ctx: 8192,
+          num_predict
         }
       };
 
