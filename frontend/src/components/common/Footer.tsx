@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
           </a>
         </div>
         <div className="text-center mt-4 text-xs text-gray-500">
-          MarkerMate - Beta Version
+          MarkerMate - Offline Version
         </div>
       </div>
     </footer>
