@@ -1,99 +1,89 @@
-# MarkerMate
+# MarkerMate Offline
 
-A web-based application that automates the grading of handwritten English assessments using AI.
+Automate the grading of handwritten English assessments using local AI. Upload a rubric, submit student papers (handwritten or typed), and get AI-powered grades with evidence-based feedback — all running entirely on your machine with no cloud APIs, accounts, or internet connection required.
 
-## Features
+## How It Works
 
-- Upload teacher rubrics (PDF, PNG, JPG)
-- Process up to 30 student submissions per batch
-- OCR processing of handwritten documents
-- AI-powered grading based on uploaded rubrics
-- Interactive grade review and modification
-- Export functionality for final grades
+1. **Upload a rubric** — PDF or image of your grading criteria. The AI extracts and structures the criteria automatically.
+2. **Upload student submissions** — Up to 30 papers per batch (PDF, PNG, JPG). Handwriting is transcribed via OCR.
+3. **AI grades each paper** — Each submission is evaluated against the rubric with per-criterion scores, evidence quotes, and confidence levels.
+4. **Review and export** — Inspect grades, adjust scores, and export results.
 
-## Project Structure
+## Requirements
 
+- **Node.js 18+** — [Download](https://nodejs.org/)
+- **Ollama** — [Download](https://ollama.com/) (local LLM runtime)
+- **Gemma 4 31B model** — pulled via Ollama (see below)
+- **~20 GB disk space** for the Gemma 4 model weights
+- **16 GB+ RAM recommended** (32 GB for best performance with 31B model)
+
+## Installation
+
+### 1. Install and start Ollama
+
+Download from [ollama.com](https://ollama.com/) and install it. Then pull the Gemma 4 model:
+
+```bash
+ollama pull gemma4:31b
 ```
-Marker Mate/
-├── frontend/          # React.js frontend application
-├── backend/           # Node.js/Express backend API
-├── shared/            # Shared types and utilities
-└── README.md
+
+Make sure Ollama is running (it usually starts automatically after install, or run `ollama serve`).
+
+### 2. Clone and set up the backend
+
+```bash
+git clone https://github.com/ryansinnott/markermate-offline.git
+cd markermate-offline/backend
+npm install
+cp .env.example .env
 ```
 
-## Getting Started
+The default `.env` works out of the box. Edit it if you need to change the Ollama URL or port.
 
-### Prerequisites
+### 3. Set up the frontend
 
-- Node.js 16+
-- npm or yarn
-- Claude API key
+```bash
+cd ../frontend
+npm install
+```
 
-### Installation
+### 4. Run
 
-1. Clone the repository
-2. Install backend dependencies:
-   ```bash
-   cd backend
-   npm install
-   ```
+Open two terminals from the project root:
 
-3. Install frontend dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
+```bash
+# Terminal 1 — Backend (port 3001)
+cd backend
+npm run dev
 
-4. Set up environment variables:
-   ```bash
-   # Backend
-   cp backend/.env.example backend/.env
-   # Add your Claude API key to backend/.env
+# Terminal 2 — Frontend (port 3000)
+cd frontend
+npm start
+```
 
-   # Frontend
-   cp frontend/.env.example frontend/.env
-   ```
-
-### Development
-
-1. Start the backend server:
-   ```bash
-   cd backend
-   npm run dev
-   ```
-
-2. Start the frontend development server:
-   ```bash
-   cd frontend
-   npm start
-   ```
-
-The application will be available at http://localhost:3000
-
-## API Endpoints
-
-- `POST /api/rubric/upload` - Upload grading rubric
-- `POST /api/submissions/upload` - Upload student submissions
-- `GET /api/grading/status` - Check grading progress
-- `GET /api/grading/results` - Get grading results
-- `PUT /api/grading/modify` - Modify grades
-- `GET /api/export/grades` - Export final grades
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Tech Stack
 
-**Frontend:**
-- React 18 with TypeScript
-- Tailwind CSS for styling
-- React Router for navigation
-- Axios for API calls
+- **Frontend:** React 18, TypeScript, Tailwind CSS, React Router
+- **Backend:** Node.js, Express, TypeScript
+- **AI:** Ollama + Gemma 4 (31B) with vision capabilities for handwriting OCR and grading
+- **Database:** SQLite (for saved rubrics only)
+- **File handling:** PDF-to-image conversion, drag-and-drop upload
 
-**Backend:**
-- Node.js with Express
-- TypeScript
-- Claude AI for grading
-- Tesseract.js for OCR
-- Multer for file uploads
+## Configuration
+
+All configuration is in `backend/.env` (copied from `.env.example`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `3001` | Backend server port |
+| `OLLAMA_URL` | `http://localhost:11434` | Ollama API endpoint |
+| `OLLAMA_MODEL` | `gemma4:31b` | Model to use for grading |
+| `MAX_FILE_SIZE` | `50MB` | Max upload size per file |
+| `MAX_FILES_PER_BATCH` | `30` | Max submissions per batch |
+| `CORS_ORIGIN` | `http://localhost:3000` | Allowed frontend origin |
 
 ## License
 
-MIT License
+MIT

@@ -4,155 +4,85 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MarkerMate Offline is a fully offline web application that automates grading of handwritten English assessments using local AI. It consists of a React TypeScript frontend and Node.js Express backend with **Ollama/Gemma 4** integration for OCR and intelligent grading. No cloud APIs or authentication required — everything runs locally.
-
-**Working Directory**: The project root is `marker-mate/` - all paths below are relative to this directory.
+MarkerMate Offline is a fully offline web application that automates grading of handwritten English assessments using local AI. React TypeScript frontend + Node.js Express backend with **Ollama/Gemma 4** for OCR and intelligent grading. No cloud APIs or authentication — everything runs locally.
 
 ## Prerequisites
 
-- **Node.js 18+** (for native fetch support)
-- **Ollama** installed and running locally (`http://localhost:11434`)
+- **Node.js 18+**
+- **Ollama** running locally (`http://localhost:11434`)
 - **Gemma 4 model** pulled: `ollama pull gemma4:31b`
-
-## Quick Start
-
-```bash
-# Ensure Ollama is running with Gemma 4
-ollama pull gemma4:31b
-ollama serve  # if not already running
-
-# Terminal 1: Start backend (port 3001)
-cd backend
-npm install
-cp .env.example .env
-npm run dev
-
-# Terminal 2: Start frontend (port 3000)
-cd frontend
-npm install
-npm start
-```
-
-Both servers must run simultaneously. Frontend at http://localhost:3000 proxies API requests to backend. No API keys or login required.
 
 ## Development Commands
 
-### Backend (Node.js/Express/TypeScript)
 ```bash
+# Backend (port 3001) — always use dev, not start
 cd backend
-npm run dev          # Start development server with ts-node (port 3001)
-npm run build        # Compile TypeScript to JavaScript
-npm start            # Run compiled production build
-npm run lint         # Run ESLint
-npm run lint:fix     # Auto-fix ESLint issues
-npm test             # Run Jest tests
-npm test -- <pattern> # Run single test file (e.g., npm test -- grading)
-```
+npm install && cp .env.example .env  # first time only
+npm run dev          # Start with ts-node
+npm run build        # Compile TypeScript
+npm run lint         # ESLint
+npm run lint:fix     # Auto-fix
+npm test             # Jest
+npm test -- <pattern> # Single test (e.g., npm test -- grading)
 
-### Frontend (React/TypeScript)
-```bash
+# Frontend (port 3000)
 cd frontend
-npm start            # Start development server (port 3000)
-npm run build        # Build for production
-npm test             # Run React tests
+npm install          # first time only
+npm start            # CRA dev server
+npm run build        # Production build
+npm test             # React tests
 ```
 
-### Environment Setup
-- Copy `backend/.env.example` to `backend/.env` (defaults work out of the box)
-- Copy `frontend/.env.example` to `frontend/.env`
+Both servers must run simultaneously. Frontend proxies API requests to backend via CRA proxy config.
 
-## Architecture Overview
+## Architecture
 
-### Backend Structure (`backend/src/`)
-- **Routes** (`routes/`):
-  - `completeGrading.ts` → `/api/complete-grading/*` - Main 3-step grading workflow
-  - `rubric.ts` → `/api/rubric/*` - Rubric upload and analysis
-  - `submissions.ts` → `/api/submissions/*` - Student work upload
-  - `export.ts` → `/api/export/*` - Grade export
-  - `savedRubrics.ts` → `/api/rubrics/*` - Save/load/delete rubrics (no auth, uses hardcoded local user)
-- **Services** (`services/`):
-  - `gradingService.ts` - Ollama/Gemma 4 integration for transcription, analysis, and grading
-  - `ollamaClient.ts` - Ollama REST API client with retry logic
-  - `pdfToImages.ts` - PDF-to-image conversion (Ollama requires images, not PDFs)
-- **Middleware** (`middleware/`):
-  - `errorHandler.ts` - Custom error handling with proper HTTP status codes
-  - `auth.ts` - Pass-through (auth disabled for offline mode)
-- **Database** (`database/`):
-  - `db.ts` - SQLite via better-sqlite3 with WAL mode; stores saved rubrics with hardcoded `local-user`
-- **Utils** (`utils/`):
-  - `logger.ts` - Winston logging (console + file)
+### Backend (`backend/src/`)
 
-Key dependencies: Express, Multer, better-sqlite3, p-limit, pdf-to-img, Winston
+**Routes** map 1:1 to API namespaces:
+- `completeGrading.ts` → `/api/complete-grading/*` — Main 3-step grading workflow (transcribe → analyze → grade)
+- `rubric.ts` → `/api/rubric/*` — Rubric upload and AI analysis
+- `submissions.ts` → `/api/submissions/*` — Student work upload
+- `export.ts` → `/api/export/*` — Grade export
+- `savedRubrics.ts` → `/api/rubrics/*` — CRUD for saved rubrics (hardcoded `local-user`, no auth)
 
-### Frontend Structure (`frontend/src/`)
-- **Pages** (`pages/`):
-  - `HomePage.tsx` - Landing page
-  - `UploadPage.tsx` - Main entry point, file upload workflow
-  - `UploadRubricPage.tsx` - Standalone rubric upload
-  - `AnalysisPage.tsx` - AI analysis results display
-  - `ResultsPage.tsx` - Grade review and modification
-- **Components**:
-  - `components/upload/` - File upload with drag-and-drop (RubricUpload, SubmissionUpload)
-  - `components/grading/` - Grade display (GradeCard shows full transcribed text)
-  - `components/rubric/` - Rubric editing (RubricEditTable, SaveRubricModal, RubricGridDisplay, ScoringLevelsEditor)
-  - `components/common/` - Shared UI (Header, Footer, ImageViewer, BetaBanner, FeedbackButton)
+**Services** — the core AI logic:
+- `gradingService.ts` — Orchestrates transcription, analysis, and grading via Ollama. Key method: `transcribeAndAnalyze()` does transcription + analysis in a single AI call. Defines all TypeScript interfaces (`FileAnalysisResult`, `GradingResult`, `StudentGradingResult`, `GradingCriterion`).
+- `ollamaClient.ts` — Wraps Ollama `/api/generate` REST endpoint. Uses `undici` Agent (not native fetch) to disable Node's default header/body timeouts for long-running inference. Exponential backoff retry (3 attempts). Context window: 8192 tokens, max output: 4096 tokens.
+- `pdfToImages.ts` — Converts PDF pages to PNG base64 since Ollama vision API requires images, not PDFs.
 
-All routes are public — no authentication or protected routes.
+**Database**: SQLite via `better-sqlite3` with WAL mode (`backend/data/markermate.db`). Only stores saved rubrics.
+
+**Sessions**: In-memory `Map` with 1-hour expiry and 30-minute cleanup interval. Not persisted.
+
+### Frontend (`frontend/src/`)
+
+CRA (Create React App) with React Router. Five pages: `HomePage` → `UploadRubricPage`/`UploadPage` → `AnalysisPage` → `ResultsPage`. All routes public.
+
+**Critical data flow detail**: Analysis/grading results are passed between pages via React Router `navigation state` — this is ephemeral and lost on page refresh. There is no client-side persistence layer.
+
+Component directories: `upload/` (drag-and-drop file handling), `grading/` (grade display cards), `rubric/` (rubric editing UI), `common/` (shared layout).
 
 ### Data Flow
-1. **Rubric Upload** → Gemma 4 analyzes grading criteria (via Ollama vision API)
+1. **Rubric Upload** → Gemma 4 analyzes grading criteria via Ollama vision API
 2. **Student Submissions** → Gemma 4 transcribes handwriting and assesses quality
-3. **AI Grading** → Professional Teacher AI grades against rubric with evidence
-4. **Results Display** → Teacher reviews, modifies, exports grades
+3. **AI Grading** → Teacher AI persona grades against rubric with evidence and confidence scores
+4. **Results** → Teacher reviews, modifies, exports grades
 
-Analysis results passed between pages via React Router navigation state (ephemeral).
+## Key Technical Gotchas
 
-## Key Technical Details
-
-### Ollama/Gemma 4 Integration
-- Uses **Gemma 4 (31B)** via Ollama REST API (`/api/generate`) with vision capabilities
-- `ollamaClient.ts` provides `callOllamaWithRetry()` with exponential backoff (3 retries)
-- `pdfToImages.ts` converts PDF pages to PNG images since Ollama doesn't support PDF input directly
-- 5-minute timeout for large multi-page documents
-- Professional teacher persona with evidence-based scoring and confidence assessment
-- Combined `transcribeAndAnalyze()` method: single AI call for transcription + analysis
-
-### AI Grading Approach
-- Holistic reading before systematic evaluation against each rubric criterion
-- Matches essay quality to exact rubric descriptor language
-- Returns confidence scores (High/Medium/Low) and uncertain sections for manual review
-- Handles cursive, print, mixed styles, corrections, and margin notes
-- Year-level calibration for Years 7-12 standards
-
-### Session Management
-- Grading sessions use in-memory Map storage with automatic cleanup every 30 minutes
-- Sessions expire after 1 hour
-- Saved rubrics persist in SQLite (`backend/data/markermate.db`) with hardcoded `local-user` owner
-
-### File Upload
-- Max 50MB per file, 30 files per batch
-- Formats: PDF, PNG, JPG, JPEG
-- PDFs are rasterized to images before sending to Ollama
-- Directories auto-created at backend startup: `uploads/rubrics`, `uploads/submissions`, `temp/ocr`, `logs`, `data`
-
-### TypeScript Interfaces
-Key interfaces in `services/gradingService.ts`:
-- `FileAnalysisResult` - AI response with confidence scoring
-- `GradingResult` - Complete grading with scores, evidence, feedback
-- `StudentGradingResult` - Individual student transcription and assessment
-- `GradingCriterion` - Rubric criteria with scoring levels
-
-### API Details
-- Health check: `GET /api/health` — also reports Ollama connection status and model availability
+- **Always `npm run dev`** for backend development — `npm start` requires `npm run build` first
+- **`pdf-to-img` is ESM-only** — imported via dynamic `import()` in `pdfToImages.ts` (the rest of the backend is CommonJS)
+- **`undici` for Ollama HTTP** — Node's native fetch has header/body timeouts that kill long inference requests; `ollamaClient.ts` uses a custom `undici.Agent` with timeouts disabled
+- **`num_predict=4096`** caps Ollama output tokens to prevent runaway generation
+- **Frontend proxy**: `"proxy": "http://localhost:3001"` in `frontend/package.json` — no manual CORS config needed in dev
+- **`frontend/build-subdirectory/`** contains a checked-in production build (separate from `frontend/build/`)
+- TypeScript strict mode, ES2020 target, CommonJS modules (backend)
+- Tailwind CSS with `@tailwindcss/typography`
 - Rate limiting: 100 requests per 15 minutes per IP
-- Frontend proxies to `http://localhost:3001` in development
-- All routes are public (no authentication)
+- File uploads: max 50MB per file, 30 files per batch; formats: PDF, PNG, JPG, JPEG
+- Upload directories auto-created at backend startup
 
-## Implementation Notes
+## Environment
 
-- Always use `npm run dev` for backend development (not `npm start` which requires prior `npm run build`)
-- Ollama must be running at `OLLAMA_URL` (default `http://localhost:11434`) with `OLLAMA_MODEL` pulled
-- TypeScript strict mode with ES2020 target and CommonJS modules
-- `pdf-to-img` is ESM-only — imported via dynamic `import()` in `pdfToImages.ts`
-- Tailwind CSS with `@tailwindcss/typography` for rich text rendering
-- Error handling with custom `createError()` middleware and Winston logging
+Copy `backend/.env.example` to `backend/.env` — defaults work out of the box. Key vars: `OLLAMA_URL`, `OLLAMA_MODEL`, `PORT`, `CORS_ORIGIN`.
