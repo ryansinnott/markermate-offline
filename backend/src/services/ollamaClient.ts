@@ -2,7 +2,7 @@ import { Agent } from 'undici';
 import { logger } from '../utils/logger';
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4:31b';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma4:latest';
 
 // Disable Node's default headers/body timeouts for long-running Ollama requests
 const ollamaDispatcher = new Agent({

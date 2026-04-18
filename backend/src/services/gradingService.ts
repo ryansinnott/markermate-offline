@@ -457,7 +457,7 @@ CRITICAL INSTRUCTIONS:
         analysis: responseText || 'No analysis available',
         fileType: 'rubric',
         fileName,
-        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b'
+        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest'
       };
 
     } catch (error) {
@@ -488,7 +488,7 @@ CRITICAL INSTRUCTIONS:
         analysis: '',
         fileType: 'rubric',
         fileName: path.basename(filePath),
-        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b',
+        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest',
         error: userMessage
       };
     }
@@ -531,7 +531,7 @@ Transcribe all readable text and provide analysis.`;
         analysis: responseText || 'No analysis available',
         fileType: 'student_work',
         fileName,
-        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b'
+        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest'
       };
 
     } catch (error) {
@@ -541,7 +541,7 @@ Transcribe all readable text and provide analysis.`;
         analysis: '',
         fileType: 'student_work',
         fileName: path.basename(filePath),
-        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b',
+        modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest',
         error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
@@ -689,7 +689,7 @@ Return ONLY valid JSON in this exact format:
             analysis: 'Basic transcription completed. JSON parsing failed - manual review needed.',
             fileType: 'student_work',
             fileName,
-            modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b',
+            modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest',
             error: 'JSON parsing failed'
           }
         };
@@ -722,7 +722,7 @@ Return ONLY valid JSON in this exact format:
           analysis: analysisText,
           fileType: 'student_work',
           fileName,
-          modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b',
+          modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest',
           confidence: confidence,
           qualityNotes: qualityNotes,
           uncertainSections: uncertainSections
@@ -738,7 +738,7 @@ Return ONLY valid JSON in this exact format:
           analysis: 'Transcription failed due to processing error. Manual review required.',
           fileType: 'student_work',
           fileName: path.basename(filePath),
-          modelUsed: process.env.OLLAMA_MODEL || 'gemma4:31b',
+          modelUsed: process.env.OLLAMA_MODEL || 'gemma4:latest',
           error: error instanceof Error ? error.message : 'Unknown error',
           confidence: 'Low',
           qualityNotes: 'Processing failed - unable to assess quality',

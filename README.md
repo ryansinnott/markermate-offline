@@ -13,9 +13,9 @@ Automate the grading of handwritten English assessments using local AI. Upload a
 
 - **Node.js 18+** — [Download](https://nodejs.org/)
 - **Ollama** — [Download](https://ollama.com/) (local LLM runtime)
-- **Gemma 4 31B model** — pulled via Ollama (see below)
-- **~20 GB disk space** for the Gemma 4 model weights
-- **16 GB+ RAM recommended** (32 GB for best performance with 31B model)
+- **Gemma 4 model** — pulled via Ollama (see below)
+- **Sufficient disk space** for the Gemma 4 model weights
+- **16 GB+ RAM recommended**
 
 ## Installation
 
@@ -24,7 +24,7 @@ Automate the grading of handwritten English assessments using local AI. Upload a
 Download from [ollama.com](https://ollama.com/) and install it. Then pull the Gemma 4 model:
 
 ```bash
-ollama pull gemma4:31b
+ollama pull gemma4:latest
 ```
 
 Make sure Ollama is running (it usually starts automatically after install, or run `ollama serve`).
@@ -67,7 +67,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - **Frontend:** React 18, TypeScript, Tailwind CSS, React Router
 - **Backend:** Node.js, Express, TypeScript
-- **AI:** Ollama + Gemma 4 (31B) with vision capabilities for handwriting OCR and grading
+- **AI:** Ollama + Gemma 4 with vision capabilities for handwriting OCR and grading
 - **Database:** SQLite (for saved rubrics only)
 - **File handling:** PDF-to-image conversion, drag-and-drop upload
 
@@ -79,7 +79,7 @@ All configuration is in `backend/.env` (copied from `.env.example`):
 |----------|---------|-------------|
 | `PORT` | `3001` | Backend server port |
 | `OLLAMA_URL` | `http://localhost:11434` | Ollama API endpoint |
-| `OLLAMA_MODEL` | `gemma4:31b` | Model to use for grading |
+| `OLLAMA_MODEL` | `gemma4:latest` | Model to use for grading |
 | `MAX_FILE_SIZE` | `50MB` | Max upload size per file |
 | `MAX_FILES_PER_BATCH` | `30` | Max submissions per batch |
 | `CORS_ORIGIN` | `http://localhost:3000` | Allowed frontend origin |
