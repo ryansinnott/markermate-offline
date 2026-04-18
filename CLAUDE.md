@@ -10,7 +10,7 @@ MarkerMate Offline is a fully offline web application that automates grading of 
 
 - **Node.js 18+**
 - **Ollama** running locally (`http://localhost:11434`)
-- **Gemma 4 model** pulled: `ollama pull gemma4:31b`
+- **Gemma 4 model** pulled: `ollama pull gemma4:latest`
 
 ## Development Commands
 
